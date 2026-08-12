@@ -21,6 +21,7 @@ class _ProfileManagerState extends ConsumerState<ProfileManager> {
   late TextEditingController _longBioController;
   late TextEditingController _locationController;
   late TextEditingController _emailController;
+  late TextEditingController _profileImageUrlController;
   late TextEditingController _resumeUrlController;
 
   bool _isSaving = false;
@@ -35,6 +36,7 @@ class _ProfileManagerState extends ConsumerState<ProfileManager> {
     _longBioController = TextEditingController();
     _locationController = TextEditingController();
     _emailController = TextEditingController();
+    _profileImageUrlController = TextEditingController();
     _resumeUrlController = TextEditingController();
   }
 
@@ -46,6 +48,7 @@ class _ProfileManagerState extends ConsumerState<ProfileManager> {
     _longBioController.text = profile.longBio;
     _locationController.text = profile.location;
     _emailController.text = profile.email;
+    _profileImageUrlController.text = profile.profileImageUrl;
     _resumeUrlController.text = profile.resumeUrl;
   }
 
@@ -63,7 +66,7 @@ class _ProfileManagerState extends ConsumerState<ProfileManager> {
           longBio: _longBioController.text.trim(),
           location: _locationController.text.trim(),
           email: _emailController.text.trim(),
-          profileImageUrl: '',
+          profileImageUrl: _profileImageUrlController.text.trim(),
           resumeUrl: _resumeUrlController.text.trim(),
         );
         await repo.updateProfile(updated);
@@ -72,7 +75,7 @@ class _ProfileManagerState extends ConsumerState<ProfileManager> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text("✓ Profile updated successfully in Cloud Firestore!"),
+              content: Text("✓ Profile & Profile Picture updated successfully in Cloud Firestore!"),
               backgroundColor: AdminTheme.success,
               duration: Duration(seconds: 3),
             ),
@@ -147,6 +150,8 @@ class _ProfileManagerState extends ConsumerState<ProfileManager> {
                   ],
                 ),
                 const SizedBox(height: 16),
+                _buildTextField("Profile Picture Image URL (e.g. Firebase Storage, GitHub, Imgur URL)", _profileImageUrlController),
+                const SizedBox(height: 16),
                 _buildTextField("Resume / CV Download URL", _resumeUrlController),
               ],
             ),
@@ -188,6 +193,7 @@ class _ProfileManagerState extends ConsumerState<ProfileManager> {
     _longBioController.dispose();
     _locationController.dispose();
     _emailController.dispose();
+    _profileImageUrlController.dispose();
     _resumeUrlController.dispose();
     super.dispose();
   }
